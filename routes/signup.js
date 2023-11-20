@@ -1,11 +1,12 @@
 const express = require("express");
 const UserModel = require("../schema/user");
 const ClienteModel = require("../schema/clientes");
+const MayoristaModel = require("../schema/mayoristas");
 const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { nombre, genero, edad, correo, clave } = req.body;
+  const { nombre, correo, clave, tipo, telefono, direccion, descripcion, ubicacion } = req.body;
 
   if (!correo || !clave) {
     return res.status(409).json(
@@ -31,18 +32,34 @@ router.post("/", async (req, res) => {
         email: correo,
         name: nombre,
         password: clave,
+        tipo: tipo
       });
       const usuarioGuardado = await user.save();
       
-      //Crear cliente
-      const nuevoCliente = new ClienteModel({
-        id_user: usuarioGuardado._id,
-        nombre: nombre,
-        sexo: genero,
-        edad: edad,
-      });
-      // Guardar el cliente
-      await nuevoCliente.save();
+      if(tipo === 'cliente'){
+        //Crear cliente
+        const nuevoCliente = new ClienteModel({
+          id_user: usuarioGuardado._id,
+          nombre: nombre,
+          telefono: telefono,
+          correo: correo,
+          direccion: direccion
+        });
+        // Guardar el cliente
+        await nuevoCliente.save();
+      }else{
+        //Crear mayorista
+        const nuevoMayorista = new MayoristaModel({
+          id_user: mayoristaGuardado._id,
+          nombre: nombre,
+          descripcion: descripcion,
+          telefono: telefono,
+          correo: correo,
+          ubicacion: ubicacion
+        });
+        // Guardar el mayorista
+        await nuevoMayorista.save();
+      }
 
       res.json(
         jsonResponse(200, {

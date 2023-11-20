@@ -9,6 +9,7 @@ const UserSchema = new Mongoose.Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String },
   password: { type: String, required: true },
+  tipo: { type: String }
 });
 
 UserSchema.pre("save", function (next) {
