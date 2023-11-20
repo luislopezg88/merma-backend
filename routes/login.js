@@ -6,7 +6,8 @@ const getUserInfo = require("../lib/getUserInfo");
 const router = express.Router();
 
 router.post("/", async function (req, res) {
-  const { correo: email, clave: password } = req.body;
+  const { email: email, password: password } = req.body;
+  console.log(email);
   try {
     let user = new UserModel();
     //Existe usuario
