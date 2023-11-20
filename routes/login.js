@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/", async function (req, res) {
   const { email: email, password: password } = req.body;
-  console.log(email);
+  //console.log(email);
   try {
     let user = new UserModel();
     //Existe usuario

@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
       }else{
         //Crear mayorista
         const nuevoMayorista = new MayoristaModel({
-          id_user: mayoristaGuardado._id,
+          id_user: usuarioGuardado._id,
           nombre: nombre,
           descripcion: descripcion,
           telefono: telefono,
