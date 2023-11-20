@@ -6,9 +6,9 @@ const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { nombre, correo, clave, tipo, telefono, direccion, descripcion, ubicacion } = req.body;
+  const { nombre, email, password, tipo, telefono, direccion, descripcion, ubicacion } = req.body;
 
-  if (!correo || !clave) {
+  if (!email || !password) {
     return res.status(409).json(
       jsonResponse(409, {
         error: "email y contraseña son obligatorios",
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
   try {
     const user = new UserModel();
     //Existe el usuario
-    const userExists = await user.usernameExists(correo);
+    const userExists = await user.usernameExists(email);
     if (userExists) {
       return res.status(409).json(
         jsonResponse(409, {
@@ -29,9 +29,9 @@ router.post("/", async (req, res) => {
     } else {
       //Crear usuario
       const user = new UserModel({
-        email: correo,
+        email: email,
         name: nombre,
-        password: clave,
+        password: password,
         tipo: tipo
       });
       const usuarioGuardado = await user.save();
@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
           id_user: usuarioGuardado._id,
           nombre: nombre,
           telefono: telefono,
-          correo: correo,
+          email: email,
           direccion: direccion
         });
         // Guardar el cliente
@@ -54,7 +54,7 @@ router.post("/", async (req, res) => {
           nombre: nombre,
           descripcion: descripcion,
           telefono: telefono,
-          correo: correo,
+          email: email,
           ubicacion: ubicacion
         });
         // Guardar el mayorista
