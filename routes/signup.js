@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
       });
       const usuarioGuardado = await user.save();
       
-      if(tipo === 'cliente'){
+      if(tipo == 'cliente'){
         //Crear cliente
         const nuevoCliente = new ClienteModel({
           id_user: usuarioGuardado._id,
