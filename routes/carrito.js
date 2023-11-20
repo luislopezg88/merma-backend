@@ -14,6 +14,7 @@ router.post("/", async (req, res) => {
       const nuevoProducto = new Ventas({
         id_producto: producto._id,
         id_cliente: producto.id_cliente,
+        id_mayorista: producto.id_mayorista,
         cantidad: producto.cantidad,
         fecha_vencimiento: producto.fecha_vencimiento,
       });

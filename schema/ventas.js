@@ -10,6 +10,10 @@ const VentasSchema = new Mongoose.Schema({
     type: Mongoose.Schema.Types.ObjectId,
     ref: "clientes",
   },
+  id_mayorista: {
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: "mayoristas",
+  },
   cantidad: { type: Number },
   fecha_vencimiento: { type: Date },
   fecha: { type: Date, default: Date.now }
