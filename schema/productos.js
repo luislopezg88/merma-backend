@@ -5,8 +5,7 @@ const ProductoSchema = new Mongoose.Schema({
   nombre: { type: String },
   descripcion: { type: String },
   imagen: { type: String },
-  precio: { type: Number },
-  fecha_vencimiento: { type: Date },
+  precio: { type: Number }
 });
 
 ProductoSchema.statics.existsByNombre = async function (nombre) {

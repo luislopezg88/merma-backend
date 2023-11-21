@@ -16,14 +16,15 @@ const InventarioSchema = new Mongoose.Schema({
 });
 
 InventarioSchema.statics.existsInventario = async function ({ id_producto, id_mayorista, fecha_vencimiento }) {
-    const inventarioCount = await this.countDocuments({
-      $or: [
-        { id_producto },
-        { id_mayorista },
-        { fecha_vencimiento }
-      ]
-    });
-    return inventarioCount > 0;
+  //console.log('Parámetros de existsInventario:', { id_producto, id_mayorista, fecha_vencimiento });
+  const inventarioCount = await this.countDocuments({
+    $or: [
+      { id_producto },
+      { id_mayorista },
+      { fecha_vencimiento }
+    ]
+  });
+  return inventarioCount > 0;
 }; 
 
 InventarioSchema.statics.idInventario = async function ({ id_producto, id_mayorista, fecha_vencimiento }) {

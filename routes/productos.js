@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const ProductoSchema = require("../schema/productos");
+const InventarioSchema = require("../schema/inventarios");
 const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
@@ -20,10 +21,83 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   try {
-    const items = await ProductoSchema.find({ id_user: req.user.id });
+    const items = await ProductoSchema.find(); //{ id_user: req.user.id }
     return res.json(items);
   } catch (error) {
     //console.log(error);
+    return res.status(500).json({ error: "Error al obtener los productos" });
+  }
+});
+
+router.get("/selectProductos", async (req, res) => {
+  try {
+    const data = await ProductoSchema.find();
+    
+    // Mapear los resultados para crear un nuevo array con la estructura deseada
+    const formattedData = data.map(({ _id, nombre }) => ({
+      id: _id,
+      nombre: nombre,
+    }));
+
+    return res.json(
+      jsonResponse(200, {
+        data: formattedData,
+        recordsTotal: formattedData.length,
+      })
+    );
+  } catch (error) {
+    return res.status(500).json({ error: "Error al obtener los todos" });
+  }
+});
+
+router.get("/tiendaProductos", async (req, res) => {
+  try {
+    const data = await InventarioSchema.aggregate([
+      { $unwind: "$id_producto" },
+      {
+        $lookup: {
+          from: "productos",
+          localField: "id_producto",
+          foreignField: "_id",
+          as: "producto",
+        },
+      },
+      { $unwind: "$producto" },
+      {
+        $lookup: {
+          from: "mayoristas",
+          localField: "id_mayorista",
+          foreignField: "_id",
+          as: "mayoristas",
+        },
+      },
+      { $unwind: "$mayoristas" },
+      {
+        $group: {
+          _id: "$id_producto",
+          nombre: { $first: "$producto.nombre" },
+          precio: { $first: "$producto.precio" },
+          imagen: { $first: "$producto.imagen" },
+          mayoristas: {
+            $push: {
+              id_mayorista: "$mayoristas._id",
+              cantidad: "$cantidad",
+              fecha_vencimiento: "$fecha_vencimiento",
+              nombre_mayorista: "$mayoristas.nombre",
+            },
+          },
+        },
+      },
+    ]);
+
+    return res.json(
+      jsonResponse(200, {
+        data,
+        recordsTotal: data.length,
+      })
+    );
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: "Error al obtener los todos" });
   }
 });
@@ -74,25 +148,27 @@ router.post("/", upload.single("file"), async (req, res) => {
   }
 });
 
-router.post("/inventario/", async (req, res) => {
+router.post("/inventario", async (req, res) => {
   const {
     id_producto,
     id_mayorista,
     cantidad,
     fecha_vencimiento
   } = req.body;
-
+  //console.log(req.body);
   if (!cantidad || !fecha_vencimiento) {
     return res.status(409).json(
       jsonResponse(409, {
-        error: "El cantidad y fecha de vencimiento son obligatorios",
+        error: "La cantidad y fecha de vencimiento son obligatorios",
       })
     );
   }
 
   try {
+    //console.log('Parámetros de existsInventario 1:', { id_producto, id_mayorista, fecha_vencimiento });
     const exists = await InventarioSchema.existsInventario(id_producto, id_mayorista, fecha_vencimiento);
-
+    //console.log(exists);
+    
     if (exists) {
       const id = await InventarioSchema.idInventario(id_producto, id_mayorista, fecha_vencimiento);
       const result = await InventarioSchema.updateOne(
@@ -130,6 +206,7 @@ router.post("/inventario/", async (req, res) => {
         })
       );
     }
+    
   } catch (error) {
     res.status(500).json({ error: "Error al cargar el producto en inventario" });
   }

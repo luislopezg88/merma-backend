@@ -24,8 +24,13 @@ app.use("/api/signup", require("./routes/signup"));
 app.use("/api/signout", require("./routes/logout"));
 app.use("/api/mayoristas", require("./routes/mayoristas"));
 app.use("/api/clientes", require("./routes/clientes"));
+
 app.use("/api/productos", require("./routes/productos"));
 app.use("/api/productos/inventario", require("./routes/productos"));
+app.use("/api/productos/selectProductos", require("./routes/productos"));
+app.use("/api/productos/tiendaProductos", require("./routes/productos"));
+app.use("/api/productos/inventario", require("./routes/productos"));
+
 app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/carrito", require("./routes/carrito"));
 app.use("/api/users", require("./routes/user"));
