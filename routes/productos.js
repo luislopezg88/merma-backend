@@ -88,6 +88,15 @@ router.get("/tiendaProductos", async (req, res) => {
           },
         },
       },
+      {
+        $project: {
+          id: "$_id",
+          nombre: "$nombre",
+          precio: "$precio",
+          imagen: "$imagen",
+          mayoristas: "$mayoristas",
+        },
+      }
     ]);
 
     return res.json(
