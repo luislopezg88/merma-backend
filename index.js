@@ -31,8 +31,9 @@ app.use("/api/productos/selectProductos", require("./routes/productos"));
 app.use("/api/productos/tiendaProductos", require("./routes/productos"));
 app.use("/api/productos/inventario", require("./routes/productos"));
 
-app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/carrito", require("./routes/carrito"));
+
+app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/users", require("./routes/user"));
 // Ruta para renovar el
 app.use("/api/refresh-token", require("./routes/refreshToken"));

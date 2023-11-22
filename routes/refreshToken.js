@@ -7,6 +7,11 @@ const getUserInfo = require("../lib/getUserInfo");
 const Token = require("../schema/token");
 const router = express.Router();
 
+
+router.get("/", async (req, res) => {
+  
+});
+
 router.post("/", async function (req, res, next) {
   //log.info("POST /api/refresh-token");
   const refreshToken = req.body.refreshToken;

@@ -16,7 +16,8 @@ router.post("/", async (req, res) => {
         id_cliente: producto.id_cliente,
         id_mayorista: producto.id_mayorista,
         cantidad: producto.cantidad,
-        fecha_vencimiento: producto.fecha_vencimiento,
+        precio: producto.precio,
+        fecha_vencimiento: producto.fecha_vencimiento
       });
       await nuevoProducto.save();
     }

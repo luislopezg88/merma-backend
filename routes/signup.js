@@ -6,7 +6,7 @@ const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { nombre, email, password, tipo, telefono, direccion, descripcion, ubicacion } = req.body;
+  const { nombre, email, password, rol, telefono, direccion, descripcion, ubicacion } = req.body;
 
   if (!email || !password) {
     return res.status(409).json(
@@ -32,11 +32,11 @@ router.post("/", async (req, res) => {
         email: email,
         name: nombre,
         password: password,
-        tipo: tipo
+        rol: rol
       });
       const usuarioGuardado = await user.save();
       
-      if(tipo == 'cliente'){
+      if(rol == 'cliente'){
         //Crear cliente
         const nuevoCliente = new ClienteModel({
           id_user: usuarioGuardado._id,
