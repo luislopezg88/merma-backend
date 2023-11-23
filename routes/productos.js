@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const ProductoSchema = require("../schema/productos");
 const InventarioSchema = require("../schema/inventarios");
+const MayoristaSchema = require("../schema/mayoristas");
 const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
@@ -160,7 +161,7 @@ router.post("/", upload.single("file"), async (req, res) => {
 router.post("/inventario", async (req, res) => {
   const {
     id_producto,
-    id_mayorista,
+    id_usuario,
     cantidad,
     fecha_vencimiento
   } = req.body;
@@ -173,9 +174,20 @@ router.post("/inventario", async (req, res) => {
     );
   }
 
+  // Buscar el id_mayorista asociado al id_usuario en la colección "mayorista"
+  const mayorista = await MayoristaSchema.findOne({ id_user: id_usuario });
+
+  if (!mayorista) {
+    return res.status(404).json(
+      jsonResponse(404, {
+        error: "No se encontró un mayorista asociado a este usuario",
+      })
+    );
+  }
+
   try {
     //console.log('Parámetros de existsInventario 1:', { id_producto, id_mayorista, fecha_vencimiento });
-    const exists = await InventarioSchema.existsInventario(id_producto, id_mayorista, fecha_vencimiento);
+    const exists = await InventarioSchema.existsInventario(id_producto, mayorista._id, fecha_vencimiento);
     //console.log(exists);
     
     if (exists) {

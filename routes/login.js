@@ -21,9 +21,14 @@ router.post("/", async function (req, res) {
       );
 
       if (passwordCorrect) {
+        const accessToken = user.createAccessToken();
+        const refreshToken = await user.createRefreshToken();
+
+        //console.log('todo ok')
         return res.json(
           jsonResponse(200, {
-            accessToken: "dsd96585dfd54",
+            accessToken,
+            refreshToken,
             user: getUserInfo(user),
           })
         );
