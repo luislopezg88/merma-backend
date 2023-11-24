@@ -8,7 +8,7 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
-
+//mconsola.bogdan@gmail.com / Darkblood
 const port = process.env.PORT || 3100;
 
 main().catch((err) => console.log(err));
@@ -18,7 +18,7 @@ async function main() {
 
   console.log("Conectado a la base de datos");
 }
-
+//
 app.use("/api/login", require("./routes/login"));
 app.use("/api/signup", require("./routes/signup"));
 app.use("/api/signout", require("./routes/logout"));
