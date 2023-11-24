@@ -233,4 +233,11 @@ router.post("/inventario", async (req, res) => {
   }
 });
 
+router.get("/imagenes/:img", function (req, res) {
+  const img = req.params.img;
+  const fileName = encodeURIComponent(img);
+  const filePath = path.join(__dirname, "..", "imagenes", fileName);
+  res.sendFile(filePath);
+});
+
 module.exports = router;
