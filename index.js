@@ -37,7 +37,8 @@ app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/dashboard/ventas", require("./routes/dashboard"));
 app.use("/api/users", require("./routes/user"));
 
-app.use('/imagenes', express.static('imagenes'));
+const path = require('path');
+app.use('/imagenes', express.static(path.join(__dirname, 'imagenes')));
 
 // Ruta para renovar el
 app.use("/api/refresh-token", require("./routes/refreshToken"));
