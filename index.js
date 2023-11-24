@@ -36,6 +36,9 @@ app.use("/api/carrito", require("./routes/carrito"));
 app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/dashboard/ventas", require("./routes/dashboard"));
 app.use("/api/users", require("./routes/user"));
+
+app.use('/imagenes', express.static('imagenes'));
+
 // Ruta para renovar el
 app.use("/api/refresh-token", require("./routes/refreshToken"));
 
