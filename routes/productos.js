@@ -119,7 +119,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     imagen,
     precio
   } = req.body;
-
+  console.log('1');
   if (!nombre) {
     return res.status(409).json(
       jsonResponse(409, {
@@ -130,7 +130,7 @@ router.post("/", upload.single("file"), async (req, res) => {
 
   try {
     const exists = await ProductoSchema.existsByNombre(nombre);
-
+    console.log('2');
     if (exists) {
       return res.status(409).json(
         jsonResponse(409, {
@@ -154,6 +154,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       );
     }
   } catch (error) {
+    console.log('2');
     res.status(500).json({ error: "Error al crear el producto" });
   }
 });
@@ -173,10 +174,10 @@ router.post("/inventario", async (req, res) => {
       })
     );
   }
-
+  
   // Buscar el id_mayorista asociado al id_usuario en la colección "mayorista"
   const mayorista = await MayoristaSchema.findOne({ id_user: id_usuario });
-
+  //console.log(id_usuario);
   if (!mayorista) {
     return res.status(404).json(
       jsonResponse(404, {
@@ -184,14 +185,15 @@ router.post("/inventario", async (req, res) => {
       })
     );
   }
-
+  //console.log('1');
   try {
+    //console.log('hi');
     //console.log('Parámetros de existsInventario 1:', { id_producto, id_mayorista, fecha_vencimiento });
     const exists = await InventarioSchema.existsInventario(id_producto, mayorista._id, fecha_vencimiento);
     //console.log(exists);
     
     if (exists) {
-      const id = await InventarioSchema.idInventario(id_producto, id_mayorista, fecha_vencimiento);
+      const id = await InventarioSchema.idInventario(id_producto, mayorista._id, fecha_vencimiento);
       const result = await InventarioSchema.updateOne(
         { _id: id },
         {
@@ -215,7 +217,7 @@ router.post("/inventario", async (req, res) => {
       //Crear producto en inventario
       const nuevoInventario = new InventarioSchema({
         id_producto: id_producto,
-        id_mayorista: id_mayorista,
+        id_mayorista: mayorista._id,
         cantidad: cantidad,
         fecha_vencimiento: fecha_vencimiento
       });
@@ -229,6 +231,7 @@ router.post("/inventario", async (req, res) => {
     }
     
   } catch (error) {
+    //console.log('2');
     res.status(500).json({ error: "Error al cargar el producto en inventario" });
   }
 });
