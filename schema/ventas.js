@@ -79,7 +79,7 @@ VentasSchema.statics.obtenerProductosConDescuento = async function (id_mayorista
 };
 
 
-VentasSchema.statics.obtenerVentas = async function () {//id_cliente
+VentasSchema.statics.obtenerVentas = async function (id_cliente) {
     /*
     const matchStage = {
       $match: {
