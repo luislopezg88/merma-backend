@@ -79,17 +79,15 @@ VentasSchema.statics.obtenerProductosConDescuento = async function (id_mayorista
 };
 
 
-VentasSchema.statics.obtenerVentas = async function () { //id_cliente
-    /*  
+VentasSchema.statics.obtenerVentas = async function (id_cliente) {
     const matchStage = {
       $match: {
         id_cliente: id_cliente ? new Mongoose.Types.ObjectId(id_cliente) : { $exists: true },
       },
     };
-    */
   
     const resultados = await this.aggregate([
-      //matchStage,
+      matchStage,
       {
         $group: {
           _id: "$id_producto",
