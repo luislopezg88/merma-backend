@@ -14,12 +14,13 @@ router.post("/", async function (req, res) {
     const userExists = await user.usernameExists(email);
     if (userExists) {
       user = await UserModel.findOne({ email: email });
+      //console.log('user')
       //Verficar contraseña
       const passwordCorrect = await user.isCorrectPassword(
         password,
         user.password
       );
-
+      //console.log('password')
       if (passwordCorrect) {
         const accessToken = user.createAccessToken();
         const refreshToken = await user.createRefreshToken();
@@ -47,6 +48,7 @@ router.post("/", async function (req, res) {
       );
     }
   } catch (err) {
+    //console.error('no');
     console.error(err);
   }
 });
