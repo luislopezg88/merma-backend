@@ -6,6 +6,7 @@ const InventarioSchema = require("../schema/inventarios");
 const MayoristaSchema = require("../schema/mayoristas");
 const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
+const fs = require('fs');
 
 // Configurar multer carga de archivos
 const storage = multer.diskStorage({
@@ -19,6 +20,18 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+router.get("/imagenes/:img", function (req, res) {
+  const img = req.params.img;
+  const fileName = encodeURIComponent(img);
+  const filePath = path.join(__dirname, "..", "imagenes", fileName);
+
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send("Imagen no encontrada");
+  }
+});
 
 router.get("/", async (req, res) => {
   try {
@@ -234,13 +247,6 @@ router.post("/inventario", async (req, res) => {
     //console.log('2');
     res.status(500).json({ error: "Error al cargar el producto en inventario" });
   }
-});
-
-router.get("/imagenes/:img", function (req, res) {
-  const img = req.params.img;
-  const fileName = encodeURIComponent(img);
-  const filePath = path.join(__dirname, "..", "imagenes", fileName);
-  res.sendFile(filePath);
 });
 
 module.exports = router;

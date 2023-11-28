@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
@@ -8,8 +9,17 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
-//mconsola.bogdan@gmail.com / Darkblood
 const port = process.env.PORT || 3100;
+
+app.use(express.static(path.join(__dirname, 'imagenes')));
+
+app.use((req, res, next) => {
+  console.log("Request URL:", req.originalUrl);
+  console.log("Resolved Path:", path.resolve(__dirname, 'imagenes'));
+  next();
+});
+
+
 
 main().catch((err) => console.log(err));
 

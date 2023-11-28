@@ -68,7 +68,7 @@ VentasSchema.statics.obtenerProductosConDescuento = async function (id_mayorista
   // Calcular descuento después de obtener los resultados
   const resultadosConDescuento = resultados.map(resultado => {
     const descuento = resultado.precio - resultado.precio_descuento;
-    const porcentajeDescuento = (descuento / resultado.precio) * 100;
+    const porcentajeDescuento = Math.round((descuento / resultado.precio) * 100); // Redondea al número entero más cercano
     return { ...resultado, porcentajeDescuento };
   });
 
